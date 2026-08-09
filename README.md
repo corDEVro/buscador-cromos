@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Buscador de Cromos
 
-## Getting Started
+Seguimiento de tu colección de cromos del **álbum Panini del Mundial 2026** (980 cromos). Consulta rápida de faltantes, estados por cromo y búsqueda por jugador, equipo o código.
 
-First, run the development server:
+## Funcionalidades
+
+- **Catálogo completo**: 48 selecciones × 20 cromos + 20 cromos especiales = 980 cromos.
+- **Estados por cromo**: Me falta / Pegado / Repetido (clic para cambiar).
+- **Consulta rápida de faltantes**: página `/faltantes`.
+- **Búsqueda y filtros**: por jugador, equipo, código (ej. `ESP15`), grupo y estado.
+- **Panel de progreso** global y por selección.
+
+## Stack
+
+- Next.js 16 (App Router, Turbopack, TypeScript)
+- Prisma 7 con SQLite (driver adapter `better-sqlite3`)
+- Tailwind CSS 4
+
+## Puesta en marcha
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run db:migrate   # crea la base de datos SQLite
+npm run db:seed      # carga el catálogo (980 cromos)
+npm run dev          # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Comandos
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Comando | Descripción |
+| --- | --- |
+| `npm run dev` | Servidor de desarrollo |
+| `npm run build` | Build de producción |
+| `npm run start` | Servidor de producción |
+| `npm run lint` | ESLint |
+| `npm run db:migrate` | Aplica migraciones de Prisma |
+| `npm run db:seed` | Carga el catálogo desde `prisma/seed-data.ts` |
+| `npm run db:studio` | Navegador visual de la base de datos |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Estructura
 
-## Learn More
+```
+prisma/
+  schema.prisma        # Esquema de la base de datos
+  seed.ts              # Carga el catálogo
+  seed-data.ts         # Catálogo fuente: 48 equipos + 20 especiales
+src/
+  app/
+    page.tsx           # Panel de inicio (progreso)
+    album/page.tsx     # Álbum interactivo
+    faltantes/page.tsx # Consulta rápida de faltantes
+    api/stickers/[id]/route.ts  # API para cambiar el estado de un cromo
+  components/          # Componentes de UI
+  lib/
+    prisma.ts          # Cliente Prisma
+    albums.ts          # Acceso a datos y estadísticas
+    types.ts           # Tipos compartidos
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Modelo de datos
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Album**: colección (ej. `mundial-2026`). Añadir la Liga 26-27 sería crear otro álbum.
+- **Team**: selección/equipo dentro de un álbum (con grupo y orden).
+- **Sticker**: cromo con código, nombre, categoría (`LOGO`, `PLAYER`, `PHOTO`, `SPECIAL`) y estado (`MISSING`, `OWNED`, `DUPLICATE`).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## API
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`PATCH /api/stickers/:id` con `{ "status": "MISSING" | "OWNED" | "DUPLICATE" }` actualiza el estado de un cromo.
