@@ -1,0 +1,46 @@
+/* ============================================================================
+   Estilos globales (Tailwind CSS 4)
+   - Paleta del álbum definida como tema (@theme): clases bg-brand, text-brand…
+   - Fondo con degradados suaves y tipografía redondeada infantil.
+   - Animación "pop" al tocar un cromo.
+   ========================================================================== */
+@import "tailwindcss";
+
+/* Colores de marca reutilizables como utilidades de Tailwind */
+@theme {
+  --color-brand: #ff4b44;        /* rojo principal de la app */
+  --color-brand-dark: #d92d23;   /* rojo para textos/títulos */
+  --color-brand-light: #ffe3e1;  /* rosa muy claro para aros/fondos suaves */
+  --color-sun: #fbbf24;          /* amarillo acento */
+  --font-kid: "Baloo 2", "Comic Sans MS", ui-rounded, "Segoe UI", system-ui, sans-serif;
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-kid);
+  background:
+    radial-gradient(circle at 12% 8%, #ffe9a855 0 32%, transparent 60%),
+    radial-gradient(circle at 88% 90%, #ffd6d455 0 30%, transparent 60%),
+    #fffaf3;
+}
+
+/* Ocultar barra de scroll en las pestañas de equipos */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@keyframes pop {
+  0% { transform: scale(1); }
+  45% { transform: scale(1.12) rotate(-2deg); }
+  100% { transform: scale(1); }
+}
+.animate-pop {
+  animation: pop 0.25s ease-out;
+}
