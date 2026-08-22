@@ -1,5 +1,4 @@
 # Netlify: frontend React + proxy de /api al backend en Render.
-# Sustituye REEMPLAZA-TU-BACKEND por la URL de tu servicio de Render.
 
 [build]
   base = "frontend"
@@ -8,7 +7,7 @@
 
 [[redirects]]
   from = "/api/*"
-  to = "https://REEMPLAZA-TU-BACKEND.onrender.com/api/:splat"
+  to = "https://buscador-cromos.onrender.com/api/:splat"
   status = 200
   force = true
 
