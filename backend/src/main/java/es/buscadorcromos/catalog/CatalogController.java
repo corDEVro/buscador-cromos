@@ -77,7 +77,8 @@ public class CatalogController {
             case ADN_PRIME -> "ADN LaLiga Prime";
             case FANTASY -> "LaLiga Fantasy";
             case DRAFT23 -> "Draft 23";
-            case KROMIX -> "Kromix";
+            case KROMIX -> "Kromix · paralela de Draft 23";
+            case FICHAJES -> "Últimos Fichajes";
             case EXTRA -> "Extra Stickers";
             default -> section.name();
         };

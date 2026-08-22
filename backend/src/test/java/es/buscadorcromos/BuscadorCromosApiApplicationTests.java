@@ -15,6 +15,6 @@ class BuscadorCromosApiApplicationTests {
 
     @Test
     void contextLoadsAndCatalogIsSeeded() {
-        assertThat(stickers.count()).isEqualTo(493L);
+        assertThat(stickers.count()).isEqualTo(562L);
     }
 }

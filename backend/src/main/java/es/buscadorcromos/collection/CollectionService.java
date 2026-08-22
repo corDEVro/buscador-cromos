@@ -58,8 +58,11 @@ public class CollectionService {
     }
 
     /**
-     * Fija el estado exacto de un cromo (PUT). Si el usuario aún no tenía ese
-     * cromo anotado, crea la entrada; si ya la tenía, actualiza.
+     * Fija el estado exacto de un cromo (PUT).
+     *
+     * <p>Regla clave del modelo de datos: FALTA = "sin anotar", así que pedir
+     * FALTA BORRA la fila en vez de guardar un estado FALTA. De este modo la
+     * tabla entries solo contiene PEGADA o REPETIDA.</p>
      */
     @Transactional
     public EntryDto setStatus(String username, String stickerCode, StickerStatus status) {
@@ -67,6 +70,11 @@ public class CollectionService {
         Sticker sticker = stickers.findByCode(stickerCode)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Cromo no encontrado: " + stickerCode));
+        if (status == StickerStatus.FALTA) {
+            // Volver a "me falta" = eliminar la anotación
+            entries.deleteByUserIdAndStickerId(user.getId(), sticker.getId());
+            return new EntryDto(sticker.getCode(), StickerStatus.FALTA);
+        }
         Entry entry = entries.findByUserIdAndStickerId(user.getId(), sticker.getId())
                 .orElseGet(() -> new Entry(user, sticker, status));
         entry.setStatus(status);

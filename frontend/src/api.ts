@@ -16,7 +16,7 @@ export type Status = 'FALTA' | 'PEGADA' | 'REPETIDA'
 /** Qué representa la lámina. */
 export type Category = 'ESCUDO' | 'ENTRENADOR' | 'JUGADOR'
 /** Secciones del álbum (coincide con el enum StickerSection del backend). */
-export type Section = 'EQUIPO' | 'ADN_PRIME' | 'FANTASY' | 'DRAFT23' | 'KROMIX' | 'EXTRA'
+export type Section = 'EQUIPO' | 'ADN_PRIME' | 'FANTASY' | 'DRAFT23' | 'KROMIX' | 'FICHAJES' | 'EXTRA'
 
 /** Una lámina tal y como la devuelve GET /api/catalog. */
 export interface Sticker {

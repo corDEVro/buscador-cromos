@@ -2,7 +2,7 @@
 
 App web para llevar el álbum **Liga Este (Laliga EA Sports 2026/27)** de Ediciones Este: marca qué cromos tienes pegados, cuáles faltan y tus repetidas. Pensada para peques (3–12 años): botones grandes, colores del álbum y cero fricción.
 
-**493 cromos**: 408 de equipos + 85 de series (ADN Prime, Fantasy, Draft 2023, Kromix). Los Extra Stickers (Oro/Plata/Bronce) se consultan aparte, no se pegan.
+**562 huecos**: 408 de equipos + 85 de series (ADN Prime, Fantasy, Draft 23 y su paralela Kromix) + 69 de Últimos Fichajes (se rellenan con las ediciones de invierno). Los Extra Stickers (Oro/Plata/Bronce) se consultan aparte, no se pegan.
 
 ## Stack
 
@@ -18,7 +18,7 @@ App web para llevar el álbum **Liga Este (Laliga EA Sports 2026/27)** de Edicio
 ```
 backend/    API REST (puerto 8080)
   src/main/resources/db/migration/V1__schema.sql
-  src/main/resources/catalog/liga-este-2026-27.json   ← checklist oficial (493 cromos)
+  src/main/resources/catalog/liga-este-2026-27.json   ← checklist oficial (562 huecos)
 frontend/   SPA React (puerto 5173)
 netlify.toml   build del frontend + proxy /api → Render
 render.yaml    definición del servicio de Render

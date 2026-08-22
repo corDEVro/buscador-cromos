@@ -1,13 +1,14 @@
 /**
  * Pantalla "Me faltan": lista de compras para el kiosco.
  *
- * - Agrupa por equipo solo los cromos con estado FALTA.
- * - Filtro por equipo y buscador.
+ * - Calcula los pendientes: todo cromo pegable del catálogo que NO esté en
+ *   estado PEGADA ni REPETIDA (los Extras no se pegan y quedan fuera).
+ * - Agrupa por equipo y por serie especial, con filtro y buscador.
  * - Botón flotante que copia la lista al portapapeles.
  */
 import { useEffect, useMemo, useState } from 'react'
 import { api } from '../api'
-import type { Catalog, EntryDto, Team } from '../api'
+import type { Catalog, Team } from '../api'
 import Header from '../components/Header'
 
 export default function MissingPage() {
@@ -18,19 +19,32 @@ export default function MissingPage() {
   const [copied, setCopied] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  /** Carga catálogo + colección y extrae el conjunto de códigos FALTA. */
+  /**
+   * Carga catálogo + colección y calcula los cromos que faltan.
+   *
+   * IMPORTANTE: el backend solo guarda filas para estados reales (PEGADA /
+   * REPETIDA); un cromo "sin anotar" no existe en la tabla, así que "me falta"
+   * se obtiene por diferencia: catálogo pegable − lo ya marcado.
+   */
   useEffect(() => {
     Promise.all([api.catalog(), api.collection()])
       .then(([cat, entries]) => {
         setCatalog(cat)
-        setMissing(new Set(entries.filter((e: EntryDto) => e.status === 'FALTA').map((e) => e.stickerCode)))
+        // Códigos con estado real (pegados o repetidos): esos NO faltan
+        const marcados = new Set(entries.filter((e) => e.status !== 'FALTA').map((e) => e.stickerCode))
+        // Todo lo pegable del álbum: equipos + series especiales (sin Extras)
+        const pegables = [
+          ...cat.teams.flatMap((t) => t.stickers),
+          ...cat.series.filter((s) => s.code !== 'EXTRA').flatMap((s) => s.stickers),
+        ]
+        setMissing(new Set(pegables.filter((s) => !marcados.has(s.code)).map((s) => s.code)))
       })
       .catch((e) => setError(e instanceof Error ? e.message : 'No se pudo cargar la lista'))
   }, [])
 
   /**
-   * Grupos a pintar: equipos (en orden del álbum) con al menos un cromo
-   * pendiente tras aplicar filtro de equipo y búsqueda.
+   * Grupos a pintar: equipos (en orden del álbum) y después las series
+   * especiales, mostrando solo los que están pendientes tras filtros.
    */
   const groups = useMemo(() => {
     if (!catalog) return []
@@ -46,6 +60,17 @@ export default function MissingPage() {
           .sort((a, b) => a.albumOrder - b.albumOrder)
           .map((s) => ({ badge: `${s.number}${s.slotLabel ?? ''}`, name: s.name, code: s.code }))
         if (items.length) result.push({ team, title: team.shortName, items })
+      }
+    }
+    if (teamFilter === 'ALL') {
+      for (const serie of catalog.series) {
+        if (serie.code === 'EXTRA') continue // joyas de coleccionista, no van al álbum
+        const items = serie.stickers
+          .filter((s) => missing.has(s.code))
+          .filter((s) => !q || s.name.toLowerCase().includes(q) || `${s.number}${s.slotLabel ?? ''}`.includes(q))
+          .sort((a, b) => a.albumOrder - b.albumOrder)
+          .map((s) => ({ badge: `${s.number}${s.slotLabel ?? ''}`, name: s.name, code: s.code }))
+        if (items.length) result.push({ team: null, title: serie.name, items })
       }
     }
     return result

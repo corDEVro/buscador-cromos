@@ -14,8 +14,10 @@ public enum StickerSection {
     FANTASY,
     /** Serie Draft 23 (23 cromos, jóvenes promesas nacidos en 2003+). */
     DRAFT23,
-    /** Serie Kromix metálica (23 cromos, KRX-K1..K23). */
+    /** Serie Kromix metálica (23 cromos, KRX-K1..K23): paralela 1:1 de Draft 23. */
     KROMIX,
+    /** Últimos Fichajes (69 huecos): se rellenan con las ediciones de invierno. */
+    FICHAJES,
     /** Extra Stickers Oro/Plata/Bronce (15): no se pegan en el álbum. */
     EXTRA
 }

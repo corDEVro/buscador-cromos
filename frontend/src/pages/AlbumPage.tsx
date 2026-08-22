@@ -23,6 +23,7 @@ const SERIES_TABS: { key: ViewKey; label: string }[] = [
   { key: 'FANTASY', label: 'Fantasy' },
   { key: 'DRAFT23', label: 'Draft 23' },
   { key: 'KROMIX', label: 'Kromix' },
+  { key: 'FICHAJES', label: 'Fichajes 🔄' },
   { key: 'EXTRA', label: 'Extras ✨' },
 ]
 
@@ -118,7 +119,7 @@ export default function AlbumPage() {
       <Header progress={stats?.percent} />
       <main className="mx-auto max-w-3xl px-3 pb-10 pt-4">
         <div className="mb-4 rounded-3xl bg-white p-4 shadow-md ring-2 ring-brand-light">
-          <ProgressBar percent={stats?.percent ?? 0} label={`Llevas ${stats?.pegadas ?? 0} de ${stats?.total ?? 493}`} />
+          <ProgressBar percent={stats?.percent ?? 0} label={`Llevas ${stats?.pegadas ?? 0} de ${stats?.total ?? 562}`} />
           <p className="mt-2 text-center text-sm font-bold text-slate-500">
             🔁 Repetidas: <span className="tabular-nums">{stats?.repetidas ?? 0}</span>
           </p>
