@@ -3,7 +3,8 @@
 [build]
   base = "frontend"
   command = "npm run build"
-  publish = "frontend/dist"
+  # Netlify resuelve esta ruta UNIÉNDOLA a `base` → <repo>/frontend/dist
+  publish = "dist"
 
 [build.environment]
   # Fija la versión de Node para que coincida con la del desarrollo (Vite 8 la exige).
