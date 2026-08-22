@@ -5,6 +5,7 @@
 import { useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useAuth } from '../AuthContext'
+import Footer from '../components/Footer'
 
 export default function LoginPage() {
   const { user, loading, login, register } = useAuth()
@@ -125,6 +126,8 @@ export default function LoginPage() {
           </p>
         )}
       </form>
+
+      <Footer />
     </main>
   )
 }

@@ -10,6 +10,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { api } from '../api'
 import type { Catalog, Team } from '../api'
 import Header from '../components/Header'
+import Footer from '../components/Footer'
 
 export default function MissingPage() {
   const [catalog, setCatalog] = useState<Catalog | null>(null)
@@ -161,6 +162,8 @@ export default function MissingPage() {
             {copied ? '¡Copiado! ✅' : '📋 Copiar lista'}
           </button>
         )}
+
+        <Footer />
       </main>
     </>
   )

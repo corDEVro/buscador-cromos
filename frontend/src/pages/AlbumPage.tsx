@@ -13,6 +13,7 @@ import type { Catalog, EntryDto, Section, Stats, Sticker } from '../api'
 import Header from '../components/Header'
 import ProgressBar from '../components/ProgressBar'
 import StickerCard from '../components/StickerCard'
+import Footer from '../components/Footer'
 
 /** Pestaña activa: EQUIPO muestra el selector de equipos; el resto son series. */
 type ViewKey = 'EQUIPO' | Section
@@ -209,6 +210,8 @@ export default function AlbumPage() {
           </p>
         )}
       </main>
+
+      <Footer />
     </>
   )
 }
