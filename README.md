@@ -4,6 +4,15 @@ App web para llevar el álbum **Liga Este (Laliga EA Sports 2026/27)** de Edicio
 
 **562 huecos**: 408 de equipos + 85 de series (ADN Prime, Fantasy, Draft 23 y su paralela Kromix) + 69 de Últimos Fichajes (se rellenan con las ediciones de invierno). Los Extra Stickers (Oro/Plata/Bronce) se consultan aparte, no se pegan.
 
+## Producción
+
+| Pieza | URL |
+|-------|-----|
+| Web   | https://buscador-cromos.netlify.app |
+| API   | https://buscador-cromos.onrender.com |
+
+El frontend llama siempre a `/api/*` en su propio dominio; `netlify.toml` hace de proxy hacia Render (mismo origen → cero problemas de CORS).
+
 ## Stack
 
 | Capa      | Tecnología |
@@ -76,12 +85,24 @@ Abre http://localhost:5173
 
 > ⚠️ Neon da la URL como `postgresql://user:pass@host/db`. Para `DATABASE_URL` hay que partirla: `jdbc:postgresql://host/db` y poner usuario/contraseña aparte.
 
-## Despliegue
+## Despliegue (estado actual)
 
-1. **BD** — crea un proyecto gratis en [neon.com](https://neon.com) y copia la cadena.
-2. **API** — crea un *Web Service* en [Render](https://render.com) desde este repo (detecta `render.yaml` o configúralo a mano con Docker y `backend/Dockerfile`). Rellena las variables de arriba.
-3. **Web** — conecta este repo en Netlify: lee `netlify.toml` (build del `frontend/`). Sustituye `REEMPLAZA-TU-BACKEND` por tu URL de Render.
+1. **BD** — Neon (Postgres gestionado, TLS obligatorio).
+2. **API** — Render, servicio Docker con `backend/Dockerfile`. Redespliega solo con cada `git push`.
+3. **Web** — Netlify. Lee `netlify.toml` (build del `frontend/` + proxy `/api`). El proxy ya apunta al backend real.
+
+> Nota Render: en Settings → Build hay que dejar **Dockerfile Path = `./backend/Dockerfile`** y **Docker Build Context Directory = `backend`**, para que los `COPY` del Dockerfile resuelvan bien.
+
+## Seguridad
+
+- Contraseñas con **BCrypt**; login sin pistas sobre usuarios existentes.
+- **JWT firmado** (HMAC-SHA512, caduca en 7 días); el usuario siempre se extrae del token → nadie toca la colección de otro.
+- Solo son públicos: registro/login, catálogo (lectura) y health-check.
+- CORS limitado al dominio de Netlify · sin sesiones/cookies (CSRF no aplica).
+- Consultas parametrizadas vía JPA (sin inyección SQL) · secretos solo en variables de entorno de Render.
 
 ---
 
 *Checklist transcrito de la colección oficial Liga Este 2026/27 (Ediciones Este). Proyecto familiar, sin ánimo de lucro.*
+
+Hecho con ⚽ por [Cordevro](https://cordevro.netlify.app)
