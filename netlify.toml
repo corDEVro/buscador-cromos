@@ -5,6 +5,10 @@
   command = "npm run build"
   publish = "frontend/dist"
 
+[build.environment]
+  # Fija la versión de Node para que coincida con la del desarrollo (Vite 8 la exige).
+  NODE_VERSION = "24"
+
 [[redirects]]
   from = "/api/*"
   to = "https://buscador-cromos.onrender.com/api/:splat"
