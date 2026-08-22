@@ -22,9 +22,9 @@ html {
 body {
   font-family: var(--font-kid);
   background:
-    radial-gradient(circle at 12% 8%, #a5d8ff66 0 32%, transparent 60%),
-    radial-gradient(circle at 88% 90%, #74c0fc55 0 30%, transparent 60%),
-    #dbeafe;
+    radial-gradient(circle at 12% 8%, #ffe9a855 0 32%, transparent 60%),
+    radial-gradient(circle at 88% 90%, #ffd6d455 0 30%, transparent 60%),
+    #fffaf3;
 }
 
 /* Ocultar barra de scroll en las pestañas de equipos */
