@@ -17,10 +17,13 @@
 
 html {
   -webkit-tap-highlight-color: transparent;
+  overflow-x: hidden;
 }
 
 body {
   font-family: var(--font-kid);
+  /* Evita el desplazamiento horizontal y el hueco recortado en móvil */
+  overflow-x: hidden;
   background:
     radial-gradient(circle at 12% 8%, #ffe9a855 0 32%, transparent 60%),
     radial-gradient(circle at 88% 90%, #ffd6d455 0 30%, transparent 60%),
