@@ -37,9 +37,12 @@ public class CatalogController {
         var teamList = teams.findAllByOrderByTeamOrderAsc();
         var allStickers = stickers.findAllByOrderByAlbumOrderAsc();
 
-        // Reparte los cromos por id de equipo para montar cada TeamDto
+        // Reparte los cromos por id de equipo para montar cada TeamDto.
+        // Solo los cromos de sección EQUIPO: los de Fantasy/Draft/Kromix
+        // también referencian equipo, pero deben mostrarse solo en su pestaña.
         var stickersByTeam = new java.util.HashMap<Long, List<CatalogDtos.StickerDto>>();
         for (var s : allStickers) {
+            if (s.getSection() != StickerSection.EQUIPO) continue;
             Long teamId = s.getTeam() == null ? null : s.getTeam().getId();
             if (teamId != null) {
                 stickersByTeam.computeIfAbsent(teamId, k -> new java.util.ArrayList<>()).add(toDto(s));

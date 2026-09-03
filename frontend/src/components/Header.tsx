@@ -19,6 +19,7 @@ export default function Header({ progress }: { progress?: number }) {
         <nav className="flex flex-1 items-center gap-1">
           <Tab to="/album">Mi álbum</Tab>
           <Tab to="/faltan">Me faltan</Tab>
+          <Tab to="/repetidos">Repetidas</Tab>
         </nav>
         {/* Porcentaje completado (solo si la página lo pasa) */}
         {typeof progress === 'number' && (
