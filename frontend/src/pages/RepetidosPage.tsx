@@ -31,14 +31,14 @@ export default function RepetidosPage() {
   const groups = useMemo(() => {
     if (!catalog) return []
     const q = query.trim().toLowerCase()
-    const result: { team: Team | null; title: string; items: { badge: string; name: string; code: string }[] }[] = []
+    const result: { team: Team | null; title: string; items: { badge: string; name: string | null; code: string }[] }[] = []
 
     if (teamFilter === 'ALL' || teamFilter.startsWith('T:')) {
       for (const team of catalog.teams) {
         if (teamFilter !== 'ALL' && teamFilter !== `T:${team.code}`) continue
         const items = team.stickers
           .filter((s) => repetidas.has(s.code))
-          .filter((s) => !q || s.name.toLowerCase().includes(q) || `${s.number}${s.slotLabel ?? ''}`.includes(q))
+          .filter((s) => !q || (s.name ?? '').toLowerCase().includes(q) || `${s.number}${s.slotLabel ?? ''}`.includes(q))
           .sort((a, b) => a.albumOrder - b.albumOrder)
           .map((s) => ({ badge: `${s.number}${s.slotLabel ?? ''}`, name: s.name, code: s.code }))
         if (items.length) result.push({ team, title: team.shortName, items })
@@ -48,7 +48,7 @@ export default function RepetidosPage() {
       for (const serie of catalog.series) {
         const items = serie.stickers
           .filter((s) => repetidas.has(s.code))
-          .filter((s) => !q || s.name.toLowerCase().includes(q) || `${s.number}${s.slotLabel ?? ''}`.includes(q))
+          .filter((s) => !q || (s.name ?? '').toLowerCase().includes(q) || `${s.number}${s.slotLabel ?? ''}`.includes(q))
           .sort((a, b) => a.albumOrder - b.albumOrder)
           .map((s) => ({ badge: `${s.number}${s.slotLabel ?? ''}`, name: s.name, code: s.code }))
         if (items.length) result.push({ team: null, title: serie.name, items })
@@ -63,7 +63,7 @@ export default function RepetidosPage() {
     const lines: string[] = []
     for (const g of groups) {
       lines.push(`${g.title}:`)
-      lines.push(g.items.map((i) => `${i.badge} ${i.name}`).join(' · '))
+      lines.push(g.items.map((i) => `${i.badge} ${i.name || '¿?'}`).join(' · '))
       lines.push('')
     }
     await navigator.clipboard.writeText(lines.join('\n').trim())
@@ -119,7 +119,7 @@ export default function RepetidosPage() {
                     <span className="grid min-w-11 place-items-center rounded-xl bg-orange-100 px-2 py-1 text-sm font-black tabular-nums text-orange-700">
                       {i.badge}
                     </span>
-                    <span className="font-bold text-slate-700">{i.name}</span>
+                    <span className="font-bold text-slate-700">{i.name || '¿?'}</span>
                   </li>
                 ))}
               </ul>

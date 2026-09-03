@@ -87,7 +87,7 @@ export default function AlbumPage() {
     if (!q) return list
     return list.filter(
       (s) =>
-        s.name.toLowerCase().includes(q) ||
+        (s.name ?? '').toLowerCase().includes(q) ||
         String(s.number).includes(q) ||
         `${s.number}${s.slotLabel ?? ''}`.toLowerCase() === q,
     )

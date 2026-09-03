@@ -21,7 +21,7 @@ const STYLES: Record<Status, { card: string; label: string; icon: string }> = {
 
 interface Props {
   code: string
-  name: string
+  name: string | null
   badge: string
   status: Status
   onCycle: (code: string) => void
@@ -39,7 +39,9 @@ export default function StickerCard({ code, name, badge, status, onCycle }: Prop
         {badge}
       </span>
       <span className="absolute right-2 top-1.5 text-base">{s.icon}</span>
-      <span className="line-clamp-2 px-1 text-sm leading-tight font-extrabold sm:text-base">{name}</span>
+      <span className="line-clamp-2 px-1 text-sm leading-tight font-extrabold sm:text-base">
+        {name || `Nº ${badge}`}
+      </span>
       <span className="text-[11px] font-bold opacity-80">{s.label}</span>
     </button>
   )

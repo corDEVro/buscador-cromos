@@ -22,7 +22,7 @@ export type Section = 'EQUIPO' | 'ADN_PRIME' | 'FANTASY' | 'DRAFT23' | 'KROMIX' 
 export interface Sticker {
   id: number
   code: string
-  name: string
+  name: string | null
   number: number
   slotLabel: string | null
   category: Category
